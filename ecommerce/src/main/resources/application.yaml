@@ -1,0 +1,18 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
