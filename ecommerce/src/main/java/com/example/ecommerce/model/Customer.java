@@ -72,6 +72,7 @@ public class Customer {
                     this.birth = birth;
 
     }
+
     // 3️⃣ Cadastro sem dados opcionais (sexo/gênero)
     public Customer(String email,
                     String password,
@@ -103,5 +104,87 @@ public class Customer {
         this(email, password, name, cep, cpf, birth, contactNumber);
         this.id = id;
     }
+
+    public UUID getId(){
+        return id;
+    }
+
+    public BigInteger getContactNumber() {
+        return contactNumber;
+    }
+
+    public BigInteger getCpf() {
+        return cpf;
+    }
+
+    public Date getBirth() {
+        return birth;
+    }
+
+    public Normalizer.Form getGender() {
+        return gender;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public Normalizer.Form getSex() {
+        return sex;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setBirth(Date birth) {
+        this.birth = birth;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public void setCpf(BigInteger cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setGender(Normalizer.Form gender) {
+        this.gender = gender;
+    }
+
+    public void setSex(Normalizer.Form sex) {
+        this.sex = sex;
+    }
+
+    public void setContactNumber(BigInteger contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
 }
+
 
