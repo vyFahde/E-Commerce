@@ -72,7 +72,8 @@ public class Customer {
                     this.birth = birth;
 
     }
-
+    // Tambem utilizamos a sobrecarga de customer, como uma forma de tratamento, prevenção, das variações de objetos
+    // Serve para salvar os dados em uma tabela de diferentes formas, como por exemplo na etapa de desenvolvimento, passar apenas os campos de nome e email.
     // 3️⃣ Cadastro sem dados opcionais (sexo/gênero)
     public Customer(String email,
                     String password,
