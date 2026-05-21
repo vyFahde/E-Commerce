@@ -38,12 +38,7 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    @DependsOn("rabbitAdmin")
-    public Queue welcomeEmailQueue(RabbitAdmin rabbitAdmin) {
-        // Delete the queue if it exists to ensure it's recreated with the correct arguments.
-        // WARNING: This may cause message loss if messages are in the queue during application startup.
-        rabbitAdmin.deleteQueue(QUEUE_WELCOME_EMAIL);
-
+    public Queue welcomeEmailQueue() {
         Map<String, Object> args = new HashMap<>();
         // Se a mensagem falhar nesta fila, envie-a para a DLX
         args.put("x-dead-letter-exchange", DLX_NAME);

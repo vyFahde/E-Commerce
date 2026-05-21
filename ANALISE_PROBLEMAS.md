@@ -88,3 +88,20 @@ O estado é inicializado uma única vez com base no `localStorage`, mas não há
 4. ✅ Converter `contactNumber` para número no `Register.jsx`
 5. ✅ Adicionar validação e feedback de erro melhorado
 
+
+---
+
+### 6. **Conflito de Configuração no RabbitMQ**
+**Localização:** 
+- `ecommerce-service/src/main/java/com/example/ecommerce/config/RabbitMQConfig.java`
+- `notification-service/src/main/java/com/example/notification/config/RabbitMQConfig.java`
+
+**Problema:**
+O `ecommerce-service` declarava a fila `customer.v1.welcome-email` com argumentos de Dead Letter Exchange (`x-dead-letter-exchange`), enquanto o `notification-service` declarava a mesma fila sem esses argumentos.
+
+No RabbitMQ, se você tentar declarar uma fila que já existe com argumentos diferentes, ele lança um erro de `PRECONDITION_FAILED`. Por isso, era necessário excluir a fila manualmente para que o serviço que subisse por último não falhasse ou para que a nova configuração fosse aplicada.
+
+**Solução:**
+Sincronizei as definições da fila em ambos os microserviços. Agora, tanto o produtor quanto o consumidor declaram a fila com exatamente os mesmos argumentos (`durable` e `dead-letter-config`). Além disso, removi a exclusão manual da fila no `ecommerce-service`, pois agora a declaração é idempotente e compatível.
+
+**Impacto:** Não será mais necessário excluir as filas manualmente ao reiniciar os serviços.
