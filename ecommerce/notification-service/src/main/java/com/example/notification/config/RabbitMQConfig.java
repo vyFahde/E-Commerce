@@ -1,6 +1,8 @@
 package com.example.notification.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +29,15 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue welcomeEmailQueue() {
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
+
+    @Bean
+    public Queue welcomeEmailQueue(RabbitAdmin rabbitAdmin) {
+        // Garante que a fila seja recriada com os argumentos de DLX corretos
+        rabbitAdmin.deleteQueue(QUEUE_WELCOME_EMAIL);
+        
         Map<String, Object> args = new HashMap<>();
         // Configuração de Dead Letter Exchange deve ser idêntica em todos os serviços que declaram a fila
         args.put("x-dead-letter-exchange", DLX_NAME);
@@ -36,8 +46,8 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding welcomeEmailBinding() {
-        return BindingBuilder.bind(welcomeEmailQueue()).to(ecommerceExchange()).with(ROUTING_KEY_WELCOME);
+    public Binding welcomeEmailBinding(Queue welcomeEmailQueue, DirectExchange ecommerceExchange) {
+        return BindingBuilder.bind(welcomeEmailQueue).to(ecommerceExchange).with(ROUTING_KEY_WELCOME);
     }
 
     @Bean

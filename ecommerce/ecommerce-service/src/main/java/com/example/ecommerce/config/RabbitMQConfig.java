@@ -38,7 +38,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue welcomeEmailQueue() {
+    public Queue welcomeEmailQueue(RabbitAdmin rabbitAdmin) {
+        // Deleta a fila se ela existir para garantir que seja recriada com os argumentos corretos (DLX).
+        // Isso evita o erro PRECONDITION_FAILED após a mudança na configuração.
+        rabbitAdmin.deleteQueue(QUEUE_WELCOME_EMAIL);
+        
         Map<String, Object> args = new HashMap<>();
         // Se a mensagem falhar nesta fila, envie-a para a DLX
         args.put("x-dead-letter-exchange", DLX_NAME);
@@ -52,13 +56,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding welcomeEmailBinding() {
-        return BindingBuilder.bind(welcomeEmailQueue()).to(ecommerceExchange()).with(ROUTING_KEY_WELCOME);
+    public Binding welcomeEmailBinding(Queue welcomeEmailQueue, DirectExchange ecommerceExchange) {
+        return BindingBuilder.bind(welcomeEmailQueue).to(ecommerceExchange).with(ROUTING_KEY_WELCOME);
     }
 
     @Bean
-    public Binding welcomeEmailDLQBinding() {
-        return BindingBuilder.bind(welcomeEmailDLQ()).to(deadLetterExchange()).with(ROUTING_KEY_WELCOME);
+    public Binding welcomeEmailDLQBinding(Queue welcomeEmailDLQ, DirectExchange deadLetterExchange) {
+        return BindingBuilder.bind(welcomeEmailDLQ).to(deadLetterExchange).with(ROUTING_KEY_WELCOME);
     }
 
     @Bean
