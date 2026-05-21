@@ -58,31 +58,26 @@ const Register = () => {
         return;
       }
 
-      // Preparar dados para envio - converter contactNumber para BigInteger
-      const dataToSend = {
-        ...formData,
-        contactNumber: BigInt(formData.contactNumber)
-      };
-
       // Enviar para o servidor
-      await api.post('/auth/register', {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        cep: formData.cep,
-        cpf: formData.cpf,
-        birth: formData.birth,
-        gender: formData.gender,
-        sex: formData.sex,
-        contactNumber: formData.contactNumber
-      });
+      // O backend espera um CustomerRequestDTO. O Jackson (Spring) converterá 
+      // automaticamente as strings numéricas para os tipos corretos (BigInteger, etc).
+      await api.post('/auth/register', formData);
 
       setSuccess(true);
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error ||
-                          'Erro ao registrar. Verifique os dados (CEP: 8 dígitos, CPF: 11 dígitos, Telefone: apenas números).';
+      let errorMessage = 'Erro ao registrar. Verifique os dados.';
+      
+      if (err.response) {
+        // O servidor respondeu com um status de erro
+        errorMessage = typeof err.response.data === 'string' 
+          ? err.response.data 
+          : (err.response.data?.message || err.response.data?.error || errorMessage);
+      } else if (err.request) {
+        // A requisição foi feita mas não houve resposta (servidor offline)
+        errorMessage = 'Servidor fora do ar. Verifique se o backend está rodando na porta 8080.';
+      }
+
       setError(errorMessage);
       console.error('Erro no registro:', err);
     } finally {

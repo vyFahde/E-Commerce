@@ -115,6 +115,47 @@
   background-color: #f1f3f5;
 }
 
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  background: none;
+  border: 1px solid #ced4da;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.buy-btn {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.buy-btn:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+.delete-btn {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
 .product-form {
   background-color: #f8f9fa;
   padding: 20px;

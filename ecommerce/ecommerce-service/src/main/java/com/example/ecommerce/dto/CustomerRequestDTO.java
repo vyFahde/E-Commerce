@@ -47,6 +47,7 @@ public record CustomerRequestDTO(
 
         @NotNull(message = "A data de nascimento é obrigatória")
         @Past(message = "A data de nascimento deve ser no passado")
+        @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd")
         @Schema(description = "Data de nascimento", example = "1990-05-15")
         Date birth,
 

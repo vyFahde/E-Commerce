@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.ecommerce.model.Customer;
 
 /**
  * Controlador REST para gerenciar as operações relacionadas a clientes.
@@ -27,6 +29,21 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    /**
+     * Retorna os dados do cliente atualmente autenticado.
+     * 
+     * @return DTO do cliente logado.
+     */
+    @Operation(summary = "Obter cliente atual", description = "Retorna os detalhes do cliente que está autenticado no momento")
+    @GetMapping("/me")
+    public ResponseEntity<CustomerResponseDTO> getCurrentCustomer() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Customer customer = (Customer) authentication.getPrincipal();
+        return customerService.getCustomerById(customer.getId())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     /**
      * Lista todos os clientes cadastrados.

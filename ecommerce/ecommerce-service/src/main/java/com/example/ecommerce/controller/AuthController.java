@@ -69,7 +69,15 @@ public class AuthController {
     @Operation(summary = "Registra um novo cliente com senha criptografada")
     public ResponseEntity register(@RequestBody @Valid CustomerRequestDTO data) {
         if (this.repository.findByEmail(data.email()).isPresent()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("O e-mail informado já está em uso.");
+        }
+        
+        if (this.repository.findByCpf(data.cpf()).isPresent()) {
+            return ResponseEntity.badRequest().body("O CPF informado já está cadastrado.");
+        }
+
+        if (this.repository.findByContactNumber(data.contactNumber()).isPresent()) {
+            return ResponseEntity.badRequest().body("O número de telefone informado já está cadastrado.");
         }
 
         customerService.createCustomer(data);

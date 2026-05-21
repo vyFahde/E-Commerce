@@ -21,4 +21,18 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
      * @return Um {@link Optional} contendo o cliente, se encontrado, ou vazio caso contrário.
      */
     Optional<Customer> findByEmail(String email);
+
+    /**
+     * Busca um cliente pelo seu CPF.
+     * @param cpf O CPF do cliente.
+     * @return Um {@link Optional} contendo o cliente, se encontrado.
+     */
+    Optional<Customer> findByCpf(String cpf);
+
+    /**
+     * Busca um cliente pelo seu número de contato.
+     * @param contactNumber O número de telefone.
+     * @return Um {@link Optional} contendo o cliente, se encontrado.
+     */
+    Optional<Customer> findByContactNumber(java.math.BigInteger contactNumber);
 }

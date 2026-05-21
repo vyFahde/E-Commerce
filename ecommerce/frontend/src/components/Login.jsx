@@ -30,7 +30,16 @@ const Login = ({ setAuth }) => {
       // Redirecionar para o dashboard
       navigate('/');
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Credenciais inválidas. Tente novamente.';
+      let errorMessage = 'Credenciais inválidas. Tente novamente.';
+      
+      if (err.response) {
+        errorMessage = typeof err.response.data === 'string' 
+          ? err.response.data 
+          : (err.response.data?.message || errorMessage);
+      } else if (err.request) {
+        errorMessage = 'Não foi possível conectar ao servidor. O backend está rodando?';
+      }
+
       setError(errorMessage);
       console.error('Erro no login:', err);
     } finally {
